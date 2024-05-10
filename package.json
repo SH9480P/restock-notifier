@@ -6,7 +6,7 @@
     "type": "module",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "tsc",
+        "build": "tsc && tsc-alias",
         "start": "npm run build && node dist/index.js",
         "start:dev": "tsx src/index.ts"
     },
@@ -26,6 +26,7 @@
         "globals": "^15.1.0",
         "prettier": "^3.2.5",
         "ts-node": "^10.9.2",
+        "tsc-alias": "^1.8.9",
         "tsx": "^4.9.3",
         "typescript": "^5.4.5",
         "typescript-eslint": "^7.8.0"
