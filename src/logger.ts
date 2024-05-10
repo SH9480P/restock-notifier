@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-const logFormat = (msg: string) => `${new Date()}\n${msg}\n\n`
+const logFormat = (msg: string) => `${new Date().toLocaleString()}\n${msg}\n\n`
 
 export default {
     info: (msg: string) => {
