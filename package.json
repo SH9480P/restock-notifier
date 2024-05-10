@@ -13,8 +13,11 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@aws-sdk/client-sns": "^3.572.0",
+        "@aws-sdk/credential-providers": "^3.572.0",
         "axios": "^1.6.8",
         "croner": "^8.0.2",
+        "dotenv": "^16.4.5",
         "puppeteer": "^22.8.0",
         "toad-scheduler": "^3.0.1"
     },

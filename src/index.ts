@@ -1,7 +1,11 @@
+import dotenv from 'dotenv'
+dotenv.config()
+
 import { randomInt } from 'crypto'
 import { AsyncTask, CronJob, Task, ToadScheduler } from 'toad-scheduler'
 import { Crawler } from '@src/crawler.js'
 import logger from '@src/logger.js'
+import { sendEmail } from '@src/sns.js'
 
 const crawler = new Crawler({
     userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
@@ -35,13 +39,25 @@ const scheduler = new ToadScheduler()
 const inStockChecktask = new AsyncTask(
     'in-stock-checker',
     () => {
-        return crawler.getKhakiLargeSizeData().then((text) => {
-            if (text === 'L') {
-                logger.info('IN STOCK!')
-            } else {
-                logger.info(`Out of Stock... (${text})`)
-            }
-        })
+        return crawler
+            .getKhakiLargeSizeData()
+            .then((text) => {
+                if (text === 'L') {
+                    logger.info('IN STOCK!')
+                    return sendEmail()
+                } else {
+                    logger.info(`Out of Stock... (${text})`)
+                }
+            })
+            .then((response) => {
+                if (response) {
+                    if (response['$metadata'].httpStatusCode === 200) {
+                        logger.info('Email Send Success')
+                    } else {
+                        logger.error(new Error('Email Send Failure / ' + JSON.stringify(response)))
+                    }
+                }
+            })
     },
     (err) => {
         logger.error(err)
