@@ -1,6 +1,7 @@
 import { randomInt } from 'crypto'
-import { Crawler } from './crawler'
 import { AsyncTask, CronJob, Task, ToadScheduler } from 'toad-scheduler'
+import { Crawler } from '@src/crawler.js'
+import logger from '@src/logger.js'
 
 const crawler = new Crawler({
     userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
@@ -36,14 +37,14 @@ const inStockChecktask = new AsyncTask(
     () => {
         return crawler.getKhakiLargeSizeData().then((text) => {
             if (text === 'L') {
-                console.log('in stock!')
+                logger.info('IN STOCK!')
             } else {
-                console.log(`out of stock. the message says:${text}`)
+                logger.info(`Out of Stock... (${text})`)
             }
         })
     },
     (err) => {
-        console.error(err)
+        logger.error(err)
     }
 )
 let inStockCheckJob = new CronJob({ cronExpression }, inStockChecktask)
@@ -61,3 +62,10 @@ const updateCronExprTask = new Task('update-cron-expression', () => {
 })
 const updateCronExprJob = new CronJob({ cronExpression: '0 0 9,11,13,15,17,19,21 * * *' }, updateCronExprTask)
 scheduler.addCronJob(updateCronExprJob)
+
+process.on('uncaughtException', (err) => {
+    logger.error(err)
+})
+process.on('unhandledRejection', (err: Error) => {
+    logger.error(err)
+})
