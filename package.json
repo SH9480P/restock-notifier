@@ -3,35 +3,35 @@
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
-    "type": "module",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "tsc && tsc-alias",
-        "start": "npm run build && pm2 start dist/index.js --name crawler",
-        "start:dev": "tsx src/index.ts"
+        "build": "rm -rf dist && tsc --noEmit && node esbuild.config.js",
+        "start": "npm run build && node dist/index.js",
+        "start:dev": "tsx src/index.ts",
+        "zip": "zip -r lambda.zip dist node_modules",
+        "deploy": "cd dist && echo {\\\"dependencies\\\":{\\\"@sparticuz/chromium\\\":\\\"^123.0.1\\\"}} > package.json && npm i && zip -r archive.zip node_modules **.js"
     },
     "author": "",
     "license": "ISC",
-    "dependencies": {
-        "@aws-sdk/client-sns": "^3.572.0",
-        "@aws-sdk/credential-providers": "^3.572.0",
-        "axios": "^1.6.8",
-        "croner": "^8.0.2",
-        "dotenv": "^16.4.5",
-        "puppeteer": "^22.8.0",
-        "toad-scheduler": "^3.0.1"
-    },
     "devDependencies": {
+        "@aws-sdk/client-sns": "^3.583.0",
+        "@aws-sdk/credential-providers": "^3.583.0",
         "@eslint/js": "^9.2.0",
         "@types/node": "^20.12.8",
+        "esbuild": "^0.21.4",
         "eslint": "^8.57.0",
         "eslint-config-prettier": "^9.1.0",
         "globals": "^15.1.0",
         "prettier": "^3.2.5",
         "ts-node": "^10.9.2",
-        "tsc-alias": "^1.8.9",
+        "tsc-alias": "^1.8.10",
         "tsx": "^4.9.3",
         "typescript": "^5.4.5",
         "typescript-eslint": "^7.8.0"
+    },
+    "dependencies": {
+        "@sparticuz/chromium": "^123.0.1",
+        "dotenv": "^16.4.5",
+        "puppeteer-core": "^22.6.0"
     }
 }

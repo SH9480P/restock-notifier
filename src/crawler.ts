@@ -1,4 +1,5 @@
-import puppeteer, { Browser, Page } from 'puppeteer'
+import puppeteer, { Browser, Page } from 'puppeteer-core'
+import chromium from '@sparticuz/chromium'
 
 interface CrawlerOption {
     userAgent: string
@@ -19,8 +20,8 @@ export class Crawler {
     private readonly sizeSelector: string
     private readonly largeSizeSelector: string
 
-    browser!: Browser
-    page!: Page
+    private browser!: Browser
+    private page!: Page
 
     constructor({
         userAgent,
@@ -47,7 +48,12 @@ export class Crawler {
     }
 
     private async accessTargetPage() {
-        this.browser = await puppeteer.launch()
+        this.browser = await puppeteer.launch({
+            args: chromium.args,
+            defaultViewport: chromium.defaultViewport,
+            executablePath: await chromium.executablePath(),
+            headless: chromium.headless,
+        })
         this.page = await this.browser.newPage()
         this.page.setUserAgent(this.userAgent)
         this.page.setExtraHTTPHeaders(this.extraHTTPHeaders)
@@ -58,24 +64,24 @@ export class Crawler {
 
     async getKhakiLargeSizeData() {
         await this.accessTargetPage()
-        await this.delay(3000)
+        await this.delay(2000)
 
         const colorSelectorElement = await this.page.waitForSelector(this.colorSelector, { timeout: 5000 })
         await colorSelectorElement?.click()
-        await this.delay(2000)
+        await this.delay(1000)
 
         const khakiColorSelectorElement = await this.page.waitForSelector(this.khakiColorSelector, { timeout: 5000 })
         await khakiColorSelectorElement?.click()
-        await this.delay(2000)
+        await this.delay(1000)
 
         const sizeSelectorElement = await this.page.waitForSelector(this.sizeSelector, { timeout: 5000 })
         await sizeSelectorElement?.click()
-        await this.delay(2000)
+        await this.delay(1000)
 
         const largeSizeSelectorElement = await this.page.waitForSelector(this.largeSizeSelector, { timeout: 5000 })
         const largeSizeText = await largeSizeSelectorElement?.evaluate((el) => el.textContent)
 
-        await this.browser.close()
+        await Promise.race([this.browser.close(), this.browser.close(), this.browser.close()])
 
         if (largeSizeText == null) {
             throw Error('No Text in Large Option')
