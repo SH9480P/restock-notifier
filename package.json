@@ -4,12 +4,9 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
         "build": "rm -rf dist && tsc --noEmit && node esbuild.config.js",
-        "start": "npm run build && node dist/index.js",
-        "start:dev": "tsx src/index.ts",
-        "zip": "zip -r lambda.zip dist node_modules",
-        "deploy": "cd dist && echo {\\\"dependencies\\\":{\\\"@sparticuz/chromium\\\":\\\"^123.0.1\\\"}} > package.json && npm i && zip -r archive.zip node_modules **.js"
+        "start": "npm run build && node run.js",
+        "deploy": "cd dist && echo {\\\"dependencies\\\":{\\\"@sparticuz/chromium\\\":\\\"^123.0.1\\\"}} > package.json && npm i && cp ../chromium.gz node_modules/@sparticuz/chromium/bin && zip -r archive.zip node_modules *.js -x \"node_modules/**/al2.tar.br\""
     },
     "author": "",
     "license": "ISC",
