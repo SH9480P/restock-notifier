@@ -64,21 +64,17 @@ export class Crawler {
 
     async getKhakiLargeSizeData() {
         await this.accessTargetPage()
-        await this.delay(2000)
 
         const colorSelectorElement = await this.page.waitForSelector(this.colorSelector, { timeout: 5000 })
         await colorSelectorElement?.click()
-        await this.delay(1000)
 
-        const khakiColorSelectorElement = await this.page.waitForSelector(this.khakiColorSelector, { timeout: 5000 })
+        const khakiColorSelectorElement = await this.page.waitForSelector(this.khakiColorSelector, { timeout: 2000 })
         await khakiColorSelectorElement?.click()
-        await this.delay(1000)
 
-        const sizeSelectorElement = await this.page.waitForSelector(this.sizeSelector, { timeout: 5000 })
+        const sizeSelectorElement = await this.page.waitForSelector(this.sizeSelector, { timeout: 2000 })
         await sizeSelectorElement?.click()
-        await this.delay(1000)
 
-        const largeSizeSelectorElement = await this.page.waitForSelector(this.largeSizeSelector, { timeout: 5000 })
+        const largeSizeSelectorElement = await this.page.waitForSelector(this.largeSizeSelector, { timeout: 2000 })
         const largeSizeText = await largeSizeSelectorElement?.evaluate((el) => el.textContent)
 
         await Promise.race([this.browser.close(), this.browser.close(), this.browser.close()])
