@@ -20,6 +20,10 @@ export default tseslint.config(
         files: ['**/*.ts'],
         languageOptions: {
             globals: node,
+            parserOptions: {
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname,
+            },
         },
         rules: {
             '@typescript-eslint/no-var-requires': 'off',
