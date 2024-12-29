@@ -4,7 +4,7 @@ const { buildSync } = require('esbuild')
 buildSync({
     entryPoints: ['src/**.ts'],
     outdir: 'dist',
-    minify: true,
+    minify: false,
     bundle: true,
     platform: 'node',
     external: [...Object.keys(pkg.devDependencies), '@sparticuz/chromium'],
