@@ -6,7 +6,7 @@
     "scripts": {
         "build": "rm -rf dist && tsc --noEmit && node esbuild.config.js",
         "start": "npm run build && sudo node run.js",
-        "deploy": "cd dist && echo {\\\"dependencies\\\":{\\\"@sparticuz/chromium\\\":\\\"^123.0.1\\\"}} > package.json && npm i && cp ../chromium.gz node_modules/@sparticuz/chromium/bin && zip -r archive.zip node_modules *.js -x \"node_modules/**/al2.tar.br\""
+        "deploy": "cd dist && echo {\\\"dependencies\\\":{\\\"@sparticuz/chromium\\\":\\\"^131.0.1\\\"}} > package.json && npm i && zip -r archive.zip ."
     },
     "type": "commonjs",
     "author": "",
@@ -29,7 +29,7 @@
         "typescript-eslint": "^8.18.2"
     },
     "dependencies": {
-        "@sparticuz/chromium": "^123.0.1",
+        "@sparticuz/chromium": "^131.0.1",
         "dotenv": "^16.4.5",
         "puppeteer-core": "^23.11.1"
     }

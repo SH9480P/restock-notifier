@@ -2,14 +2,14 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 import { Crawler } from './crawler.js'
-import { sendEmail } from './sns.js'
+// import { sendEmail } from './sns.js'
 
 export const handler = async () => {
     const crawlerOptions = {
         userAgent:
-            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
         extraHTTPHeaders: {
-            'Sec-Ch-Ua': '"Not_A Brand";v="8", "Chromium";v="123"',
+            'Sec-Ch-Ua': '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
             'Sec-Ch-Ua-Mobile': '?0',
             'Sec-Ch-Ua-Platform': 'Linux',
             'Upgrade-Insecure-Requests': '1',
@@ -35,7 +35,10 @@ export const handler = async () => {
             largeSize: '.bd_2dy3Y > div:last-child > ul > li > a[data-shp-contents-id="L"]',
         }
 
-        const colorSelectorElement = await page.waitForSelector(selectors.color, { timeout: 5000 })
+        const title = await page.title()
+        console.log(title)
+
+        const colorSelectorElement = await page.waitForSelector(selectors.color, { timeout: 9000 })
         await colorSelectorElement?.click()
 
         const khakiColorSelectorElement = await page.waitForSelector(selectors.khakiColor, { timeout: 2000 })
@@ -52,8 +55,8 @@ export const handler = async () => {
         }
 
         if (largeSizeText.trim() === 'L') {
-            const publishResult = await sendEmail()
-            console.log(publishResult)
+            // const publishResult = await sendEmail()
+            // console.log(publishResult)
             console.log('product is available')
         }
     })
