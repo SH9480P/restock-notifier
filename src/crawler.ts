@@ -1,44 +1,22 @@
 import puppeteer, { Browser, Page } from 'puppeteer-core'
 import chromium from '@sparticuz/chromium'
+import { getExecutablePathFromCache } from './browserUtils.js'
 
 interface CrawlerOption {
     userAgent: string
     extraHTTPHeaders: Record<string, string>
     url: string
-    colorSelector: string
-    khakiColorSelector: string
-    sizeSelector: string
-    largeSizeSelector: string
 }
 
 export class Crawler {
     private readonly userAgent: string
     private readonly extraHTTPHeaders: Record<string, string>
     private readonly url: string
-    private readonly colorSelector: string
-    private readonly khakiColorSelector: string
-    private readonly sizeSelector: string
-    private readonly largeSizeSelector: string
 
-    private browser!: Browser
-    private page!: Page
-
-    constructor({
-        userAgent,
-        extraHTTPHeaders,
-        url,
-        colorSelector,
-        khakiColorSelector,
-        sizeSelector,
-        largeSizeSelector,
-    }: CrawlerOption) {
+    constructor({ userAgent, extraHTTPHeaders, url }: CrawlerOption) {
         this.userAgent = userAgent
         this.extraHTTPHeaders = extraHTTPHeaders
         this.url = url
-        this.colorSelector = colorSelector
-        this.khakiColorSelector = khakiColorSelector
-        this.sizeSelector = sizeSelector
-        this.largeSizeSelector = largeSizeSelector
     }
 
     private async delay(ms: number) {
@@ -47,41 +25,30 @@ export class Crawler {
         })
     }
 
-    private async accessTargetPage() {
-        this.browser = await puppeteer.launch({
-            args: chromium.args,
+    private async openTargetPage() {
+        const browser = await puppeteer.launch({
+            args: process.env.NODE_ENV === 'development' ? ['--no-sandbox'] : chromium.args,
             defaultViewport: chromium.defaultViewport,
-            executablePath: await chromium.executablePath(),
-            headless: chromium.headless,
+            executablePath:
+                process.env.NODE_ENV === 'development'
+                    ? await getExecutablePathFromCache()
+                    : await chromium.executablePath(),
+            headless: process.env.NODE_ENV === 'development' ? false : chromium.headless,
         })
-        this.page = await this.browser.newPage()
-        this.page.setUserAgent(this.userAgent)
-        this.page.setExtraHTTPHeaders(this.extraHTTPHeaders)
 
-        await this.page.goto(this.url)
-        await this.page.setViewport({ width: 1080, height: 1024 })
+        const page = await browser.newPage()
+        page.setUserAgent(this.userAgent)
+        page.setExtraHTTPHeaders(this.extraHTTPHeaders)
+
+        await page.goto(this.url)
+        await page.setViewport({ width: 1080, height: 1024 })
+
+        return { browser, page }
     }
 
-    async getKhakiLargeSizeData() {
-        await this.accessTargetPage()
-
-        const colorSelectorElement = await this.page.waitForSelector(this.colorSelector, { timeout: 5000 })
-        await colorSelectorElement?.click()
-
-        const khakiColorSelectorElement = await this.page.waitForSelector(this.khakiColorSelector, { timeout: 2000 })
-        await khakiColorSelectorElement?.click()
-
-        const sizeSelectorElement = await this.page.waitForSelector(this.sizeSelector, { timeout: 2000 })
-        await sizeSelectorElement?.click()
-
-        const largeSizeSelectorElement = await this.page.waitForSelector(this.largeSizeSelector, { timeout: 2000 })
-        const largeSizeText = await largeSizeSelectorElement?.evaluate((el) => el.textContent)
-
-        await Promise.race([this.browser.close(), this.browser.close(), this.browser.close()])
-
-        if (largeSizeText == null) {
-            throw Error('No Text in Large Option')
-        }
-        return largeSizeText.trim()
+    async scrape(callback: (browser: Browser, page: Page) => void | Promise<void>) {
+        const { browser, page } = await this.openTargetPage()
+        await callback(browser, page)
+        await Promise.race([browser.close(), browser.close(), browser.close()])
     }
 }

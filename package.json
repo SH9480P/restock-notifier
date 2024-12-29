@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "build": "rm -rf dist && tsc --noEmit && node esbuild.config.js",
-        "start": "npm run build && node run.js",
+        "start": "npm run build && sudo node run.js",
         "deploy": "cd dist && echo {\\\"dependencies\\\":{\\\"@sparticuz/chromium\\\":\\\"^123.0.1\\\"}} > package.json && npm i && cp ../chromium.gz node_modules/@sparticuz/chromium/bin && zip -r archive.zip node_modules *.js -x \"node_modules/**/al2.tar.br\""
     },
     "type": "commonjs",
