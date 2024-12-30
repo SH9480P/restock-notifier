@@ -6,7 +6,7 @@ import globals from 'globals'
 import eslintConfigPrettier from 'eslint-config-prettier'
 
 export default tseslint.config(
-    { ignores: ['dist/*'] },
+    { ignores: ['dist/*', 'esbuild.config.js'] },
     eslint.configs.recommended,
     tseslint.configs.recommended,
     tseslint.configs.recommendedTypeChecked,
