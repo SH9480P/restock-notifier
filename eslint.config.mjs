@@ -2,7 +2,7 @@
 
 import eslint from '@eslint/js'
 import tseslint from 'typescript-eslint'
-import { node } from 'globals'
+import globals from 'globals'
 import eslintConfigPrettier from 'eslint-config-prettier'
 
 export default tseslint.config(
@@ -10,18 +10,18 @@ export default tseslint.config(
     eslint.configs.recommended,
     tseslint.configs.recommended,
     tseslint.configs.recommendedTypeChecked,
-    // @ts-ignore
     eslintConfigPrettier,
     {
         files: ['**/*.js'],
         extends: [tseslint.configs.disableTypeChecked],
     },
     {
-        files: ['**/*.ts'],
         languageOptions: {
-            globals: node,
+            globals: globals.node,
             parserOptions: {
-                projectService: true,
+                projectService: {
+                    allowDefaultProject: ['eslint.config.mjs'],
+                },
                 tsconfigRootDir: import.meta.dirname,
             },
         },
