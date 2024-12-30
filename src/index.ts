@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 import { Scraper } from './scraper.js'
-import { milez__handler, milez_naver_handler } from './scrapeHandlers.js'
+import { milez__handler } from './scrapeHandlers.js'
 
 export const handler = async () => {
     const scraperOptions = {

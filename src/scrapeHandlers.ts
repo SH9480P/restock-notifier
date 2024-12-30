@@ -1,3 +1,4 @@
+/// <reference lib="dom" />
 import type { Browser, Page } from 'puppeteer-core'
 import { sendEmail } from './sns.js'
 
@@ -42,14 +43,17 @@ export const milez__handler = async (browser: Browser, page: Page) => {
     console.log(title)
 
     const optionGroupElement = await page.waitForSelector(selector, { timeout: 5000 })
-    const optionElements = await optionGroupElement?.$$('option')
+    const optionTexts = await optionGroupElement?.$$eval('option', (elements) => elements.map((el) => el.textContent))
 
-    if (optionElements == null) {
+    if (optionTexts == null) {
         throw Error('No Option Elements')
     }
 
-    for (const optionElement of optionElements) {
-        const optionText = await optionElement?.evaluate((el) => el.textContent)
+    for (const optionText of optionTexts) {
+        if (optionText == null) {
+            throw Error('No Option Text')
+        }
+
         if (optionText.trim() === 'L') {
             console.log('product is available')
             const publishResult = await sendEmail()

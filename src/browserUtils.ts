@@ -14,7 +14,7 @@ export async function getExecutablePathFromCache() {
 
     // 설치된 브라우저 목록에서 크롬 브라우저를 찾아서 실행 파일 경로를 가져오기
     let executablePath = installedBrowsers.find(
-        (browser) => browser.browser === 'chrome' && browser.buildId === chromiumVersion
+        (browser) => browser.browser === browsers.Browser.CHROME && browser.buildId === chromiumVersion
     )?.executablePath
 
     // 실행 파일 경로가 없으면 크롬 브라우저를 설치하기

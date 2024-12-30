@@ -34,8 +34,8 @@ export class Scraper {
         })
 
         const page = await browser.newPage()
-        page.setUserAgent(this.userAgent)
-        page.setExtraHTTPHeaders(this.extraHTTPHeaders)
+        await page.setUserAgent(this.userAgent)
+        await page.setExtraHTTPHeaders(this.extraHTTPHeaders)
 
         await page.goto(url)
         await page.setViewport({ width: 1080, height: 1024 })
