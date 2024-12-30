@@ -1,4 +1,5 @@
 import type { Browser, Page } from 'puppeteer-core'
+import { sendEmail } from './sns.js'
 
 export const milez_naver_handler = async (browser: Browser, page: Page) => {
     const selectors = {
@@ -28,8 +29,32 @@ export const milez_naver_handler = async (browser: Browser, page: Page) => {
     }
 
     if (largeSizeText.trim() === 'L') {
-        // const publishResult = await sendEmail()
-        // console.log(publishResult)
         console.log('product is available')
+        const publishResult = await sendEmail()
+        console.log(publishResult)
+    }
+}
+
+export const milez__handler = async (browser: Browser, page: Page) => {
+    const selector = '#product_option_id1 > optgroup'
+
+    const title = await page.title()
+    console.log(title)
+
+    const optionGroupElement = await page.waitForSelector(selector, { timeout: 5000 })
+    const optionElements = await optionGroupElement?.$$('option')
+
+    if (optionElements == null) {
+        throw Error('No Option Elements')
+    }
+
+    for (const optionElement of optionElements) {
+        const optionText = await optionElement?.evaluate((el) => el.textContent)
+        if (optionText.trim() === 'L') {
+            console.log('product is available')
+            const publishResult = await sendEmail()
+            console.log(publishResult)
+            return
+        }
     }
 }

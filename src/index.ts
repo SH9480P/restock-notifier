@@ -2,8 +2,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 import { Scraper } from './scraper.js'
-import { milez_naver_handler } from './scrapeHandlers.js'
-// import { sendEmail } from './sns.js'
+import { milez__handler, milez_naver_handler } from './scrapeHandlers.js'
 
 export const handler = async () => {
     const scraperOptions = {
@@ -27,5 +26,12 @@ export const handler = async () => {
 
     const scraper = new Scraper(scraperOptions)
 
-    await scraper.scrape('https://smartstore.naver.com/milez/products/9141945916', milez_naver_handler)
+    // 마일즈클라이밍 스마트스토어 와이드팬츠 카키 L
+    // await scraper.scrape('https://smartstore.naver.com/milez/products/9141945916', milez_naver_handler)
+
+    // 마일즈클라이밍 자사몰 라이트팬츠 차콜 L
+    await scraper.scrape(
+        'https://milez.kr/product/%EB%A7%88%EC%9D%BC%EC%A6%88-%EB%9D%BC%EC%9D%B4%ED%8A%B8-%ED%81%B4%EB%9D%BC%EC%9D%B4%EB%B0%8D-%ED%8C%AC%EC%B8%A0%EC%B0%A8%EC%BD%9C/18/category/27/display/1/',
+        milez__handler
+    )
 }
