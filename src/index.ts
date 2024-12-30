@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 dotenv.config()
 
-import { Crawler } from './crawler.js'
+import { Crawler } from './scraper.js'
 // import { sendEmail } from './sns.js'
 
 export const handler = async () => {
