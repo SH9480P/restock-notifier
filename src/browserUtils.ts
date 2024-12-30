@@ -1,4 +1,3 @@
-// TODO: 유령 의존성인지, 문제는 없는지 확인
 import * as browsers from '@puppeteer/browsers'
 
 export async function getExecutablePathFromCache() {
