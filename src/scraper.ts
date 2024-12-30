@@ -2,16 +2,16 @@ import puppeteer, { Browser, Page } from 'puppeteer-core'
 import chromium from '@sparticuz/chromium'
 import { getExecutablePathFromCache } from './browserUtils.js'
 
-interface CrawlerOption {
+interface ScraperOption {
     userAgent: string
     extraHTTPHeaders: Record<string, string>
 }
 
-export class Crawler {
+export class Scraper {
     private readonly userAgent: string
     private readonly extraHTTPHeaders: Record<string, string>
 
-    constructor({ userAgent, extraHTTPHeaders }: CrawlerOption) {
+    constructor({ userAgent, extraHTTPHeaders }: ScraperOption) {
         this.userAgent = userAgent
         this.extraHTTPHeaders = extraHTTPHeaders
     }

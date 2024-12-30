@@ -1,11 +1,11 @@
 import dotenv from 'dotenv'
 dotenv.config()
 
-import { Crawler } from './scraper.js'
+import { Scraper } from './scraper.js'
 // import { sendEmail } from './sns.js'
 
 export const handler = async () => {
-    const crawlerOptions = {
+    const scraperOptions = {
         userAgent:
             'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
         extraHTTPHeaders: {
@@ -24,9 +24,9 @@ export const handler = async () => {
         },
     }
 
-    const crawler = new Crawler(crawlerOptions)
+    const scraper = new Scraper(scraperOptions)
 
-    await crawler.scrape('https://smartstore.naver.com/milez/products/9141945916', async (browser, page) => {
+    await scraper.scrape('https://smartstore.naver.com/milez/products/9141945916', async (browser, page) => {
         const selectors = {
             color: '.bd_2dy3Y > div:first-child > a',
             khakiColor: '.bd_2dy3Y > div:first-child > ul > li > a[data-shp-contents-id="카키"]',
