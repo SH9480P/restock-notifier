@@ -22,12 +22,11 @@ export const handler = async () => {
             'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7',
             Priority: 'u=0, i',
         },
-        url: 'https://smartstore.naver.com/milez/products/9141945916',
     }
 
     const crawler = new Crawler(crawlerOptions)
 
-    await crawler.scrape(async (browser, page) => {
+    await crawler.scrape('https://smartstore.naver.com/milez/products/9141945916', async (browser, page) => {
         const selectors = {
             color: '.bd_2dy3Y > div:first-child > a',
             khakiColor: '.bd_2dy3Y > div:first-child > ul > li > a[data-shp-contents-id="카키"]',

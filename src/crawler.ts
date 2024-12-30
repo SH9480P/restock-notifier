@@ -5,18 +5,15 @@ import { getExecutablePathFromCache } from './browserUtils.js'
 interface CrawlerOption {
     userAgent: string
     extraHTTPHeaders: Record<string, string>
-    url: string
 }
 
 export class Crawler {
     private readonly userAgent: string
     private readonly extraHTTPHeaders: Record<string, string>
-    private readonly url: string
 
-    constructor({ userAgent, extraHTTPHeaders, url }: CrawlerOption) {
+    constructor({ userAgent, extraHTTPHeaders }: CrawlerOption) {
         this.userAgent = userAgent
         this.extraHTTPHeaders = extraHTTPHeaders
-        this.url = url
     }
 
     private async delay(ms: number) {
@@ -25,7 +22,7 @@ export class Crawler {
         })
     }
 
-    private async openTargetPage() {
+    private async openTargetPage(url: string) {
         const browser = await puppeteer.launch({
             args: process.env.NODE_ENV === 'development' ? ['--no-sandbox'] : chromium.args,
             defaultViewport: chromium.defaultViewport,
@@ -40,14 +37,14 @@ export class Crawler {
         page.setUserAgent(this.userAgent)
         page.setExtraHTTPHeaders(this.extraHTTPHeaders)
 
-        await page.goto(this.url)
+        await page.goto(url)
         await page.setViewport({ width: 1080, height: 1024 })
 
         return { browser, page }
     }
 
-    async scrape(callback: (browser: Browser, page: Page) => void | Promise<void>) {
-        const { browser, page } = await this.openTargetPage()
+    async scrape(url: string, callback: (browser: Browser, page: Page) => void | Promise<void>) {
+        const { browser, page } = await this.openTargetPage(url)
         await callback(browser, page)
         await Promise.race([browser.close(), browser.close(), browser.close()])
     }
