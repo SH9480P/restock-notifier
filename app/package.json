@@ -1,0 +1,26 @@
+{
+    "name": "app",
+    "version": "1.0.0",
+    "main": "run.js",
+    "scripts": {
+        "build": "rm -rf dist && tsc --noEmit && node esbuild.config.js",
+        "start": "npm run build && sudo node run.js",
+        "deploy": "npm run build && cd dist && echo {\\\"dependencies\\\":{\\\"@sparticuz/chromium\\\":\\\"^131.0.1\\\"}} > package.json && npm i && zip -r archive.zip ."
+    },
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "devDependencies": {
+        "@aws-sdk/client-sns": "^3.583.0",
+        "@aws-sdk/credential-providers": "^3.583.0",
+        "@tsconfig/node22": "^22.0.0",
+        "esbuild": "^0.24.2",
+        "@types/node": "^22.10.2"
+    },
+    "dependencies": {
+        "@puppeteer/browsers": "^2.6.1",
+        "@sparticuz/chromium": "^131.0.1",
+        "dotenv": "^16.4.5",
+        "puppeteer-core": "^23.11.1"
+    }
+}

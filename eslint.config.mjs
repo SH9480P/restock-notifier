@@ -6,27 +6,30 @@ import globals from 'globals'
 import eslintConfigPrettier from 'eslint-config-prettier'
 
 export default tseslint.config(
-    { ignores: ['dist/*', 'esbuild.config.js'] },
+    { ignores: ['dist', 'node_modules'] },
     eslint.configs.recommended,
     tseslint.configs.recommended,
-    tseslint.configs.recommendedTypeChecked,
     eslintConfigPrettier,
-    {
-        files: ['**/*.js'],
-        extends: [tseslint.configs.disableTypeChecked],
-    },
     {
         languageOptions: {
             globals: globals.node,
+        },
+    },
+    {
+        files: ['**/*.js'],
+        extends: [tseslint.configs.disableTypeChecked],
+        rules: {
+            '@typescript-eslint/no-require-imports': 'off',
+        },
+    },
+    {
+        files: ['app/**/*.ts'],
+        extends: [tseslint.configs.recommendedTypeChecked],
+        languageOptions: {
             parserOptions: {
-                projectService: {
-                    allowDefaultProject: ['eslint.config.mjs'],
-                },
+                projectService: true,
                 tsconfigRootDir: import.meta.dirname,
             },
-        },
-        rules: {
-            '@typescript-eslint/no-var-requires': 'off',
         },
     }
 )
