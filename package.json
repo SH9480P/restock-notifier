@@ -3,16 +3,12 @@
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
-    "scripts": {
-        "build": "rm -rf dist && tsc --noEmit && node esbuild.config.js",
-        "start": "npm run build && sudo node run.js",
-        "deploy": "npm run build && cd dist && echo {\\\"dependencies\\\":{\\\"@sparticuz/chromium\\\":\\\"^131.0.1\\\"}} > package.json && npm i && zip -r archive.zip ."
-    },
     "type": "commonjs",
     "author": "",
     "license": "ISC",
     "workspaces": [
-        "app"
+        "app",
+        "cdk"
     ],
     "devDependencies": {
         "@eslint/js": "^9.17.0",
