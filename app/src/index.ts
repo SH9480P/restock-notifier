@@ -5,11 +5,15 @@ import { Scraper } from './scraper.js'
 import { milez__handler } from './scrapeHandlers.js'
 
 export const handler = async () => {
+    const chromiumMajorVersion = process.env.CHROMIUM_MAJOR_VERSION_FAKE
+    if (chromiumMajorVersion === undefined) {
+        throw new Error('CHROMIUM_MAJOR_VERSION_FAKE does not exist on env')
+    }
+
     const scraperOptions = {
-        userAgent:
-            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+        userAgent: `Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${chromiumMajorVersion}.0.0.0 Safari/537.36`,
         extraHTTPHeaders: {
-            'Sec-Ch-Ua': '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+            'Sec-Ch-Ua': `"Google Chrome";v="${chromiumMajorVersion}", "Chromium";v="${chromiumMajorVersion}", "Not_A Brand";v="24"`,
             'Sec-Ch-Ua-Mobile': '?0',
             'Sec-Ch-Ua-Platform': 'Linux',
             'Upgrade-Insecure-Requests': '1',
