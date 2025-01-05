@@ -1,7 +1,9 @@
 name: Chrome Main Version Updater
 run-name: Update Chrome Version in the HTTP Header 🚀
 
-on: [push]
+on:
+  schedule:
+    - cron: 25 22 * * *
 
 jobs:
   Deploy-With-Latest-Chrome-Version:
