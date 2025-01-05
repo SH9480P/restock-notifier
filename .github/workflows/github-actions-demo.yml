@@ -2,17 +2,7 @@ name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push]
 jobs:
-  Explore-GitHub-Actions:
-    runs-on: ubuntu-latest
-    outputs:
-      output1: ${{steps.step1.outputs.hello}}
+  Check-Chrome-Version:
+    runs-on: ubuntu-24.04
     steps:
-      - id: step1
-        run: echo "hello=world" >> "$GITHUB_OUTPUT"
-  test1:
-    runs-on: ubuntu-latest
-    needs: Explore-GitHub-Actions
-    steps:
-      - env:
-          MUSIC: ${{needs.Explore-Github-Actions.outputs.output1}}
-        run: echo "${MUSIC}"
+      - run: echo ${{vars.EMAIL_ADDRESS}}
