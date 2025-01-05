@@ -1,6 +1,8 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+name: Chrome Main Version Updater
+run-name: Update Chrome Version in the HTTP Header 🚀
+
 on: [push]
+
 jobs:
   Check-Chrome-Version:
     runs-on: ubuntu-24.04
