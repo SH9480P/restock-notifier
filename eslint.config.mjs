@@ -23,7 +23,7 @@ export default tseslint.config(
         },
     },
     {
-        files: ['app/**/*.ts'],
+        files: ['app/**/*.ts', 'cdk/**/*.ts'],
         extends: [tseslint.configs.recommendedTypeChecked],
         languageOptions: {
             parserOptions: {
