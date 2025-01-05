@@ -4,19 +4,8 @@ run-name: Update Chrome Version in the HTTP Header 🚀
 on: [push]
 
 jobs:
-  Check-Chrome-Version:
+  Deploy-With-Latest-Chrome-Version:
     runs-on: ubuntu-24.04
-    outputs:
-      major-version: ${{steps.output-step.outputs.major-version}}
-    steps:
-      - name: Check out repository code
-        uses: actions/checkout@v3
-      - name: Get Latest Chrome Version
-        id: output-step
-        run: echo "major-version=$(./scripts/latest-chrome-version-check)" >> "$GITHUB_OUTPUT"
-  Deploy:
-    runs-on: ubuntu-24.04
-    needs: Check-Chrome-Version
     environment: cdk
     permissions:
       id-token: write # This is required for requesting the JWT
@@ -24,6 +13,9 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
+      - name: Get Latest Chrome Version
+        id: get-latest-chrome-version
+        run: echo "MAJOR_VERSION=$(./scripts/latest-chrome-version-check)" >> "$GITHUB_OUTPUT"
       - name: Install nodejs (maybe v22.x lts)
         uses: actions/setup-node@v4
         with:
@@ -40,5 +32,5 @@ jobs:
       - name: Deploy CDK APP
         env:
           EMAIL_ADDRESS: ${{vars.EMAIL_ADDRESS}}
-          CHROMIUM_MAJOR_VERSION_FAKE: ${{needs.Check-Chrome-Version.outputs.major-version}}
+          CHROMIUM_MAJOR_VERSION_FAKE: ${{steps.get-latest-chrome-version.outputs.MAJOR_VERSION}}
         run: cd cdk && npm run deploy
