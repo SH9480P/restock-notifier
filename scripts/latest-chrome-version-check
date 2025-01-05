@@ -1,3 +1,9 @@
 #!/bin/bash
 
-curl https://versionhistory.googleapis.com/v1/chrome/platforms/linux/channels/stable/versions | jq -r '.versions[0].version'
+set -e
+
+version=$(curl -s https://versionhistory.googleapis.com/v1/chrome/platforms/linux/channels/stable/versions | jq -r '.versions[0].version')
+
+major_version=$(echo $version | cut -d '.' -f 1)
+
+echo $major_version
