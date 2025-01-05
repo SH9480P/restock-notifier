@@ -11,13 +11,9 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
-      - name: Install nodejs (maybe v22.x lts)
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
       - name: Get Latest Chrome Version
         id: output-step
-        run: echo "major-version=$(node scripts/latest-chrome-version-check.js)" >> "$GITHUB_OUTPUT"
+        run: echo "major-version=$(./scripts/latest-chrome-version-check)" >> "$GITHUB_OUTPUT"
   Deploy:
     runs-on: ubuntu-24.04
     needs: Check-Chrome-Version
